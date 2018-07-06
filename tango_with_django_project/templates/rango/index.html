@@ -7,14 +7,21 @@
 </head>
 <body>
     <h1>Rango says...</h1>
+    <div>hey there partner!</div>
     <div>
-        hey there partner! <br/>
-        <strong>{{ boldmessage }}</strong><br/>
+        {% if categories %}
+            {% for category in categories %}
+                <li>{{ category.name }}</li>
+            {% endfor %}
+        {% else %}
+            <strong>There are no categories present.</strong>
+        {% endif %}
     </div>
+
     <div>
         <a href="/rango/about/">About</a><br/>
         <img src="{% static 'image/xiaoxin.jpg' %}" alt="Picture of Rango">
-        <img src="{{ MEDIA_URL }}xiaoxin.jpg" alt="abab">
+        <img src="{{ MEDIA_URL }}xiaoxin.jpg" alt="Picture of xiaoxin">
     </div>
 
 </body>

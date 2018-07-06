@@ -52,17 +52,32 @@ def populate():
 
 
 def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title)
+    p = Page.objects.get_or_create(category=cat, title=title)[0]
     p.url = url
     p.views = views
     p.save()
+
+
 def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0]
     c.save()
     return c
 
+
+def add_view_likes(views_num, likes_nums):
+    for name in ("Python", "Django", "Other Frameworks"):
+        c = Category.objects.get(name=name)
+        c.view = views_num
+        c.likes = likes_nums
+        c.save()
+
+
 if __name__ == '__main__':
-    print("Starting Rango population script...")
-    populate()
+    # print("Starting Rango population script...")
+    # populate()
+    a = [(128, 64), (64, 32), (32, 16)]
+    for m, n in a:
+        add_view_likes(m, n)
+        user_id = id
 
 
