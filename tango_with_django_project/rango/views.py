@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rango.models import Category, Page
+from rango.forms import CategoryForm, PageForm
 # Create your views here.
 
 
@@ -12,6 +13,9 @@ def index(request):
 
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'categories': category_list}
+    pages = Page.objects.order_by('views')[:5]
+    context_dict['pages'] = pages
+    print(pages)
 
     # 渲染响应, 发给客户端
     return render(request, 'rango/index.html', context_dict)
@@ -44,3 +48,49 @@ def show_category(request, category_name_slug):
         context_dict['pages'] = None
 
     return render(request, 'rango/category.html', context_dict)
+
+
+def add(request):
+    form = CategoryForm()
+    # 是 HTTP POST 请求吗?
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+
+        #表单数据有效吗?
+        if form.is_valid():
+            # 把新分类存入数据库
+            form.save(commit=True)
+            # 保存新分类后可以显示一个确认消息
+            # 不过既然最受欢迎的分类在首页
+            # 那就把用户带到首页吧
+            return index(request)
+        else:
+            # 表单数据有错误
+            # 直接在终端打印出来
+            print(form.errors)
+    # 出来有效数据和无效数据之后
+    # 渲染表单 并显示可能出现的错误消息
+    return render(request, 'rango/add_category.html', {'form': form})
+
+
+def add_page(request, category_name_slug):
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+
+    form =PageForm()
+    if request.method == "POST":
+        form = PageForm(request.POST)
+        if form.is_valid():
+            if category:
+                page = form.save(commit=False)
+                page.category = category
+                page.views = 0
+                page.save()
+                return show_category(request, category_name_slug)
+        else:
+            print(form.errors)
+
+    content_dict = {'form':form, 'category': category}
+    return render(request, 'rango/add_page.html', content_dict)

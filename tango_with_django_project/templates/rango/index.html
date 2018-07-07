@@ -9,19 +9,35 @@
     <h1>Rango says...</h1>
     <div>hey there partner!</div>
     <div>
+        <h2>Most Liked Categories</h2>
         {% if categories %}
             {% for category in categories %}
                 <li>
-                    <a href="/rango/category/{{ category.slug }}">{{ category.name }}</a>
+                    <a href="/rango/category/{{ category.slug }}">{{ category.name }}
                 </li>
             {% endfor %}
         {% else %}
             <strong>There are no categories present.</strong>
         {% endif %}
+        <br/>
+        <a href="/rango/add_category/">Add a New Category</a>
+        <br/>
     </div>
-
     <div>
-        <a href="/rango/about/">About</a><br/>
+        <h2>Most Views Pages</h2>
+        {% if pages %}
+            {% for page in pages %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% endfor %}
+        {% else %}
+            <strong>There are no categories present.</strong>
+        {% endif %}
+        <br>
+
+    </div>
+    <br/>
+    <div>
+        <a href="/rango/about/"><strong>About Rango</strong></a><br/>
         <img src="{% static 'image/xiaoxin.jpg' %}" alt="Picture of Rango">
         <img src="{{ MEDIA_URL }}xiaoxin.jpg" alt="Picture of xiaoxin">
     </div>

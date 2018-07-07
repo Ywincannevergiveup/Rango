@@ -1,4 +1,6 @@
 import os
+import random
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'tango_with_django_project.settings')
 
@@ -72,12 +74,20 @@ def add_view_likes(views_num, likes_nums):
         c.save()
 
 
+def add_pages_views():
+    pages = Page.objects.all()
+    for page in pages:
+        views_num = random.randint(5, 100)
+        page.views = views_num
+        page.save()
+
+
 if __name__ == '__main__':
     # print("Starting Rango population script...")
     # populate()
-    a = [(128, 64), (64, 32), (32, 16)]
-    for m, n in a:
-        add_view_likes(m, n)
-        user_id = id
+    # a = [(128, 64), (64, 32), (32, 16)]
+    # for m, n in a:
+    #     add_view_likes(m, n)
+    #     user_id = id
 
-
+    add_pages_views()
